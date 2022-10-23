@@ -5,7 +5,7 @@ import java.io.Serializable;
 public class OderDetail implements Serializable {
     private int oderDetailId;
     private Product product;
-    private int oderId;
+    private Oder oder;
     private int quantity;
     private float price;
     private float totalMoney;
@@ -13,10 +13,10 @@ public class OderDetail implements Serializable {
     public OderDetail() {
     }
 
-    public OderDetail(int oderDetailId, Product product, int oderId, int quantity, float price, float totalMoney) {
+    public OderDetail(int oderDetailId, Product product, Oder oder, int quantity, float price, float totalMoney) {
         this.oderDetailId = oderDetailId;
         this.product = product;
-        this.oderId = oderId;
+        this.oder = oder;
         this.quantity = quantity;
         this.price = price;
         this.totalMoney = totalMoney;
@@ -38,12 +38,12 @@ public class OderDetail implements Serializable {
         this.product = product;
     }
 
-    public int getOderId() {
-        return oderId;
+    public Oder getOder() {
+        return oder;
     }
 
-    public void setOderId(int oderId) {
-        this.oderId = oderId;
+    public void setOder(Oder oder) {
+        this.oder = oder;
     }
 
     public int getQuantity() {

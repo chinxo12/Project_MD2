@@ -8,12 +8,9 @@ import ra.bussiness.design.IUser;
 import ra.bussiness.entity.User;
 import ra.bussiness.file.FileAll;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Scanner;
+import java.util.*;
 
-public class UserImpl implements IShop <User , String> {
+public class UserImpl implements IShop <User , String>, IUser {
     public static List<User> readFromFile (){
         FileAll<User> fileAll = new FileAll<>();
         List<User> listUser =  fileAll.readFromFile(ShopConstant.USER_URL);
@@ -38,8 +35,8 @@ public class UserImpl implements IShop <User , String> {
     }
 
     @Override
-    public boolean update(User user) {
-        return false;
+    public void update(Scanner scanner) {
+
     }
 
     @Override
@@ -139,6 +136,7 @@ public class UserImpl implements IShop <User , String> {
 
         }while (true);
         Date date = new Date();
+        user.setUserStatus(true);
         user.setDate(date);
         return user;
 
@@ -147,8 +145,6 @@ public class UserImpl implements IShop <User , String> {
     @Override
     public void displayData(User member) {
         List<User> list = readFromFile();
-
-        Date date = new Date();
         String status = "";
         if (member.isUserStatus()){
             status = "Còn hoạt động";
@@ -166,7 +162,8 @@ public class UserImpl implements IShop <User , String> {
             permision = "Member";
         }
 
-        System.out.printf("%-10d%-20s%-30s%-15d%-20s%-25s%-10s%-20s",member.getUserId(),member.getUserName(),member.getFullName(),member.getPhoneNumber(),member.getEmail(),permision,status);
+        System.out.printf("Mã tài khoản:%-10d  Tên tài khoản: %-20s Họ và tên: %-30s Số điện thoại: %-15s \n",member.getUserId(),member.getUserName(),member.getFullName(),member.getPhoneNumber());
+        System.out.printf("Email: %-20s Loại tài khoản: %-25s Trạng thái: %-10s Ngày đăng ký: %-20s\n",member.getEmail(),permision,status,member.getDate() );
     }
 
     @Override
@@ -174,10 +171,149 @@ public class UserImpl implements IShop <User , String> {
       List<User> userList = readFromFile();
         for (User user :userList) {
             if (user.getUserName().equals(str)){
-                user.setUserStatus(false);
-                return  true;
+                if (user.isUserStatus()){
+                    user.setUserStatus(false);
+                    return  true;
+                }else {
+                    user.setUserStatus(true);
+                    return  true;
+                }
             }
         }
         return false;
+    }
+    @Override
+    public void searchByName(String str) {
+        List<User> list = readFromFile();
+        for (User user :list) {
+            if (user.getUserName().contains(str)||user.getFullName().contains(str)){
+                displayData(user);
+            }
+        }
+    }
+
+    public static void displayUser (){
+        UserImpl userImpl = new UserImpl();
+        List<User> userList = readFromFile();
+        for (User user :userList) {
+            userImpl.displayData(user);
+        }
+    }
+    public static void addAdminUser (Scanner scanner){
+        List<User> userList = readFromFile();
+        User user = new User();
+        UserImpl userImpl = new UserImpl();
+        do {
+            System.out.print("Nhập vào tên tài khoản: ");
+            String name = scanner.nextLine();
+            System.out.print("\n");
+            boolean check = ShopValidate.checkUserNameLength(name);
+            if (check){
+                check = ShopValidate.checkValidateUserName(name);
+                if (check){
+                    for (User userEx :userList) {
+                        if (userEx.getUserName().equals(name)){
+                            check = false;
+                            break;
+                        }
+                    }
+                    if (check){
+                        user.setUserName(name);
+                        break;
+                    }else {
+                        System.err.println(ShopMessage.ALREAD_THIS_USERNAME);
+                    }
+                }
+            }else {
+                System.err.println(ShopMessage.USER_NAME_LENGTH);
+            }
+        }while (true);
+        do {
+            System.out.print("Nhập vào mật khẩu: ");
+            String password = scanner.nextLine();
+            System.out.print("\n");
+            boolean check = ShopValidate.checkPassword(password);
+            if (check){
+                System.out.print("Nhập lại mật khẩu: ");
+                String repeatPasswood = scanner.nextLine();
+                check = ShopValidate.checkPassword(repeatPasswood);
+                if (check){
+                    if (password.equals(repeatPasswood)){
+                        user.setPassword(password);
+                        break;
+                    }else {
+                        System.err.println(ShopMessage.REPEAT_PASSWORD_WRONG);
+                    }
+                }
+            }else {
+                System.err.println(ShopMessage.PASSWORD_LENGTH);
+            }
+        }while (true);
+        do {
+            System.out.print("Nhập họ và tên của bạn: ");
+            String name = scanner.nextLine();
+            System.out.print("\n");
+            boolean check = ShopValidate.checkEmptyString(name);
+            if (check){
+                user.setFullName(name);
+                break;
+            }else {
+                System.err.println(ShopMessage.DO_NOT_LEAVE_IT_BLANK);
+            }
+        }while (true);
+        do {
+            System.out.print("Nhập vào email:");
+            String email = scanner.nextLine();
+            System.out.print("\n");
+            boolean check = ShopValidate.checkEmail(email);
+            if (check){
+                user.setEmail(email);
+                break;
+            }else {
+                System.err.println(ShopMessage.EMAIL_WRONG);
+            }
+        }while (true);
+        do {
+            System.out.print("Nhập vào số điện thoại (Số điện thoại bắt đầu bằng 84) :  ");
+            String phoneNumber = scanner.nextLine();
+            System.out.println("\n");
+            boolean checkPhone = ShopValidate.checkPhoneNumber(phoneNumber);
+            if (checkPhone){
+                user.setPhoneNumber(phoneNumber);
+                break;
+            }else {
+                System.err.println(ShopMessage.PHONE_NUMBER_WRONG);
+            }
+
+        }while (true);
+        Date date = new Date();
+        user.setDate(date);
+        user.setPermission(1);
+        boolean check = userImpl.create(user);
+        if (check){
+            System.out.println("Thêm tài khoản admin mới thành công !");
+        }else {
+            System.err.println("Thêm mới thất bại");
+        }
+    }
+    public static void updateUserStatus (Scanner scanner){
+        UserImpl userImpl = new UserImpl();
+        do {
+            System.out.println("Nhập vào tên tài khoản khách hàng cần cập nhật ");
+            String name = scanner.nextLine();
+            boolean check = userImpl.delete(name);
+            if (check){
+                System.out.println("Đã thay đổi trạng thái thành công ! ");
+                break;
+            }else {
+                System.err.println("Không tìm thấy tên người dùng này vui lòng thử lại !!!! ");
+            }
+        }while (true);
+    }
+    public static void searhUserByNameOrFullName(Scanner scanner){
+        UserImpl userImpl = new UserImpl();
+        System.out.println("Nhập vào tên đăng nhập hoặc tên đầy đủ của người dùng ");
+        String name = scanner.nextLine();
+        userImpl.searchByName(name);
     }
 }

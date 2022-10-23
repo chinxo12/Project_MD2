@@ -11,12 +11,12 @@ public class Product implements Serializable {
     private String content;
     private boolean productStatus;
     private Catalog catalog;
-    private List<FlowerOfProduct> listFlower = new ArrayList<>();
+    private ArrayList<FlowerOfProduct> listFlower = new ArrayList<>();
 
     public Product() {
     }
 
-    public Product(String productId, String productName, float exportPrice, String content, boolean productStatus, Catalog catalog, List<FlowerOfProduct> listFlower) {
+    public Product(String productId, String productName, float exportPrice, String content, boolean productStatus, Catalog catalog, ArrayList<FlowerOfProduct> listFlower) {
         this.productId = productId;
         this.productName = productName;
         this.exportPrice = exportPrice;
@@ -78,7 +78,7 @@ public class Product implements Serializable {
         return listFlower;
     }
 
-    public void setListFlower(List<FlowerOfProduct> listFlower) {
+    public void setListFlower(ArrayList<FlowerOfProduct> listFlower) {
         this.listFlower = listFlower;
     }
 }

@@ -5,7 +5,7 @@ import java.util.Scanner;
 
 public interface IShop <T,E>{
     boolean create(T t);
-    boolean update (T t);
+    void update (Scanner scanner);
     List<T>  findAll ();
     T inputData (Scanner scanner);
     void displayData (T t);

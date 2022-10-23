@@ -38,8 +38,8 @@ public class CatalogImpl implements IShop<Catalog,String> , ICatalog {
     }
 
     @Override
-    public boolean update(Catalog catalog) {
-        return false;
+    public void update(Scanner scanner) {
+
     }
 
     @Override

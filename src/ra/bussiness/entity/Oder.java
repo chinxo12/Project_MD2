@@ -8,6 +8,7 @@ public class Oder implements Serializable {
     private int oderId;
     private float totalMoney;
     private boolean oderStatus;
+    private User user;
     private List<OderDetail> listOderDetail = new ArrayList<>();
 
     public Oder() {

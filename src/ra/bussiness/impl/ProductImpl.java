@@ -3,15 +3,17 @@ package ra.bussiness.impl;
 import ra.bussiness.config.ShopConstant;
 import ra.bussiness.config.ShopMessage;
 import ra.bussiness.config.ShopValidate;
+import ra.bussiness.design.IProduct;
 import ra.bussiness.design.IShop;
 import ra.bussiness.entity.*;
 import ra.bussiness.file.FileAll;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
-public class ProductImpl implements IShop<Product, String> {
+public class ProductImpl implements IShop<Product, String> , IProduct {
     public static List<Product> readFromFile() {
         FileAll<Product> fileAll = new FileAll<>();
         List<Product> listProduct = fileAll.readFromFile(ShopConstant.PRODUCT_URL);
@@ -36,8 +38,8 @@ public class ProductImpl implements IShop<Product, String> {
     }
 
     @Override
-    public boolean update(Product product) {
-        return false;
+    public void update(Scanner scanner) {
+
     }
 
     @Override
@@ -116,7 +118,7 @@ public class ProductImpl implements IShop<Product, String> {
                     System.out.println("Vui lòng chọn loài hoa ");
                     System.out.printf("%-10s%-30s\n", "STT", " Tên loài hoa ");
                     for (int j = 0; j < listFlower.size(); j++) {
-                        System.out.printf("%-10d%-30s\n", (j + 1), listFlower.get(i).getFlowerName());
+                        System.out.printf("%-10d%-30s\n", (j + 1), listFlower.get(j).getFlowerName());
                     }
                     System.out.print("Vui lòng chọn số tương ứng: ");
                     int choice = 0;
@@ -156,6 +158,7 @@ public class ProductImpl implements IShop<Product, String> {
             System.out.println("Tổng giá nhập hoa dùng trong sản phẩm là:  " + sum);
             float price = 0;
             try {
+                price = Float.parseFloat(scanner.nextLine());
                 if (price>sum*1.3f){
                     product.setExportPrice(price);
                     break;
@@ -207,14 +210,14 @@ public class ProductImpl implements IShop<Product, String> {
             status = "Không còn bán. ";
         }
         System.out.printf("Tên sản phẩm %50s\n",product.getProductName());
-        System.out.printf("Mã sản phẩm: %-10s Giá tiền bán: %-20f  Trạng thái: %-15s",product.getProductId(),product.getExportPrice(),status);
+        System.out.printf("Mã sản phẩm: %-10s Giá tiền bán: %-20f  Trạng thái: %-15s\n",product.getProductId(),product.getExportPrice(),status);
         System.out.print("Hoa được sử dụng: ");
         for (int i = 0; i < product.getListFlower().size(); i++) {
             System.out.print(product.getListFlower().get(i).getFlower().getFlowerName() + " (Số lượng: " +product.getListFlower().get(i).getQuantity() +")  ");
         }
         System.out.print("\n");
         System.out.printf("Mô tả: " +product.getContent());
-
+        System.out.print("\n");
     }
 
     @Override
@@ -279,5 +282,10 @@ public class ProductImpl implements IShop<Product, String> {
                 System.err.println(ShopMessage.DO_NOT_LEAVE_IT_BLANK);
             }
         }
+    }
+
+    @Override
+    public void searhByName(String str) {
+
     }
 }

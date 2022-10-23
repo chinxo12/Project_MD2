@@ -19,10 +19,10 @@ public class ShopManagement {
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
         List<User> listUser = new ArrayList<>();
-        Date date = new Date();
-        User user = new User(1, "admin", "123456", "Trần Đình Tín", "chinxo12@gmail.com", "84383468186",1, true ,date);
-        listUser.add(user);
-        UserImpl.writeFromFile(listUser);
+//        Date date = new Date();
+//        User user = new User(1, "admin", "123456", "Trần Đình Tín", "chinxo12@gmail.com", "84383468186",1, true ,date);
+//        listUser.add(user);
+//        UserImpl.writeFromFile(listUser);
         do {
             System.out.println("*********************** CỬA HÀNG HOA chưa đặt tên ********************");
             System.out.println("1. Đăng nhập");
@@ -40,12 +40,18 @@ public class ShopManagement {
                 case 1:
                     do {
                         User user1 = login(scanner);
-                        if (user1.getPermission()==1){
-                            adminMenu(scanner);
-                            break;
+                        if (user1!=null){
+                            if (user1.getPermission()==1){
+                                adminMenu(scanner);
+                                break;
+                            }else {
+                                userMenu(scanner);
+                                break;
+                            }
                         }else {
-                            userMenu(scanner);
+                            System.err.println("Tên đăng nhập hoặc mật khẩu không chính xác. Vui lòng thử lại !!! ");
                         }
+
                     }while (true);
                     break;
                 case 2:
@@ -289,18 +295,24 @@ public class ShopManagement {
             System.out.print("\n");
             switch (choice){
                 case 1:
+                    UserImpl.displayUser();
                     break;
                 case 2:
+                    UserImpl.addAdminUser(scanner);
                     break;
                 case 3:
                     break;
                 case 4:
+                    UserImpl.updateUserStatus(scanner);
                     break;
                 case 5:
+                    UserImpl.searhUserByNameOrFullName(scanner);
+                    break;
+                case 6:
                     exit = false;
                     break;
                 default:
-                    System.err.println("Vui lòng nhập từ 1-5 !!!");
+                    System.err.println("Vui lòng nhập từ 1-6 !!!");
             }
         }while (exit);
     }
@@ -323,6 +335,7 @@ public class ShopManagement {
             System.out.print("\n");
             switch (choice){
                 case 1:
+                    ProductImpl.displayProduct();
                     break;
                 case 2:
                     break;
@@ -346,8 +359,10 @@ public class ShopManagement {
         List<User> listUser = UserImpl.readFromFile();
         System.out.print("Tên đăng nhập: ");
         String userName =  scanner.nextLine();
-        System.out.println("Mật khẩu: ");
+        System.out.print("\n");
+        System.out.print("Mật khẩu: ");
         String password = scanner.nextLine();
+        System.out.print("\n");
         for (User user:listUser ) {
             if (user.getUserName().equals(userName) && user.getPassword().equals(password)){
                 return user;
@@ -356,7 +371,8 @@ public class ShopManagement {
         return null;
     }
     public static void regester(Scanner scanner){
-        User user = userImpl.inputData(scanner);
+        User user = new User();
+         user = userImpl.inputData(scanner);
        boolean check = userImpl.create(user);
        if(check){
            System.out.println("Dang ky thanh cong");

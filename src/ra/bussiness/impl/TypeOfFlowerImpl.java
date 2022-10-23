@@ -39,8 +39,8 @@ public class TypeOfFlowerImpl implements IShop<TypeOfFlower,Integer>, ITypeOfFlo
     }
 
     @Override
-    public boolean update(TypeOfFlower typeOfFlower) {
-        return false;
+    public void update(Scanner scanner) {
+
     }
 
     @Override

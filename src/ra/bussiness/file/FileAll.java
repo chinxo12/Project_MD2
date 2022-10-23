@@ -18,7 +18,6 @@ public class FileAll <T> {
                 ois = new ObjectInputStream(fis);
                 list = (List<T>) ois.readObject();
             }
-
         }catch (Exception e){
             e.printStackTrace();
         }

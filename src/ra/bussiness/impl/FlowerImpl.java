@@ -37,8 +37,8 @@ public class FlowerImpl implements IShop<Flower,String> , IFlower {
     }
 
     @Override
-    public boolean update(Flower flower) {
-        return false;
+    public void update(Scanner scanner) {
+
     }
 
     @Override
@@ -210,7 +210,7 @@ public class FlowerImpl implements IShop<Flower,String> , IFlower {
     public boolean searchByNameOrPrice(String str, Float price) {
         List<Flower> list = readFromFile();
         for (Flower flower :list) {
-            if (flower.getFlowerName().contains(str) || flower.getExportPrice()<price){
+            if (flower.getFlowerName().toLowerCase().contains(str) || flower.getExportPrice()<price){
                 displayData(flower);
                 return true;
             }
@@ -269,8 +269,4 @@ public class FlowerImpl implements IShop<Flower,String> , IFlower {
            }
        }
     }
-
-
-
-
 }

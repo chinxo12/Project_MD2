@@ -1,6 +1,8 @@
 package ra.bussiness.entity;
 
-public class FlowerOfProduct {
+import java.io.Serializable;
+
+public class FlowerOfProduct implements Serializable {
     private Flower flower;
     private int quantity;
 
